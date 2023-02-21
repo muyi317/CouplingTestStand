@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>ErrorCompensation</name>
+  </assembly>
+  <members>
+    <member name="M:ErrorCompensation.LabVIEWExports.ErrorCompensationRelese(System.String,System.String,System.Int32,System.Double@)">
+      <summary></summary>
+      <returns>Void</returns>
+    </member>
+  </members>
+</doc>

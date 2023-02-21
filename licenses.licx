@@ -1,0 +1,6 @@
+﻿NationalInstruments.Controls.Internal.WpfEnterpriseLicenser, NationalInstruments.Controls, Version=19.0.45.54571, Culture=neutral, PublicKeyToken=4febd62461bf11a4
+NationalInstruments.Controls.Internal.WpfProfessionalLicenser, NationalInstruments.Controls, Version=19.0.45.54571, Culture=neutral, PublicKeyToken=4febd62461bf11a4
+NationalInstruments.Controls.Internal.WpfStandardLicenser, NationalInstruments.Controls, Version=19.0.45.54571, Culture=neutral, PublicKeyToken=4febd62461bf11a4
+NationalInstruments.NetworkVariable.WindowsForms.NetworkVariableDataSource, NationalInstruments.NetworkVariable, Version=19.0.45.49152, Culture=neutral, PublicKeyToken=4febd62461bf11a4
+NationalInstruments.NetworkVariable.WindowsForms.NetworkVariableBrowserDialog, NationalInstruments.NetworkVariable, Version=19.0.45.49152, Culture=neutral, PublicKeyToken=4febd62461bf11a4
+NationalInstruments.NetworkVariable.NetworkVariableLicenser, NationalInstruments.NetworkVariable, Version=19.0.45.49152, Culture=neutral, PublicKeyToken=4febd62461bf11a4

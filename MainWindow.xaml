@@ -1,0 +1,746 @@
+﻿<Window x:Class="CouplingTestStand.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CouplingTestStand"
+        xmlns:ni="http://schemas.ni.com/controls/2009/xaml/presentation" 
+        xmlns:u1="clr-namespace:Helix3D"
+        mc:Ignorable="d"
+        Title="联轴器测试" Height="700" Width="1200" MaxWidth="1200" MinWidth="1200" MinHeight="700" MaxHeight="700">
+    <Window.Resources>
+        <Style x:Key="MarginTextBox" TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="10,0"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <TabControl HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Height="660" 
+                    Width="1180">
+            <TabItem Header="联轴器设置"
+                     x:Name="tabCouplingSet">
+                <Grid Background="#FFFFFFFF">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="217*"/>
+                        <ColumnDefinition Width="964*"/>
+                    </Grid.ColumnDefinitions>
+                    <DataGrid Name="dataGridCoupling" 
+                              HorizontalAlignment="Left" 
+                              Height="550" Margin="10,10,0,0"
+                              VerticalAlignment="Top" 
+                              Width="320" 
+                              SelectionChanged="dataGridCoupling_SelectionChanged" 
+                              IsReadOnly="True" 
+                              MinColumnWidth="318" Grid.ColumnSpan="2">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="型号" 
+                                                Binding="{Binding couplingId}" 
+                                                Width="230" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Grid Margin="128.5,10,20,150" Grid.Column="1">
+                        <u1:HelixView x:Name="helixView"/>
+                    </Grid>
+                    <StackPanel Orientation="Horizontal" Margin="2,0,0,0" Height="630" Grid.ColumnSpan="2">
+                        <Button x:Name="btnDelete" Content="删除" HorizontalAlignment="Left" Margin="10,580,0,0" VerticalAlignment="Top" Width="100" Click="btnDelete_Click" Height="30"/>
+                        <Button x:Name="btnUpdate" Content="修改" HorizontalAlignment="Left" Margin="10,580,0,0" VerticalAlignment="Top" Width="100" Click="btnUpdate_Click" Height="30"/>
+                        <Button x:Name="btnAdd" Content="插入" HorizontalAlignment="Left" Margin="10,580,0,0" VerticalAlignment="Top" Width="100" Click="btnAdd_Click" Height="30"/>
+                    </StackPanel>
+                    <Grid Margin="128.5,500,0,10" Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Label Content="型号             " HorizontalAlignment="Left" Margin="0,0,3,0"/>
+                            <TextBox x:Name="couplingType"
+                                     Text="{Binding CouplingC.CouplingId}"
+                                     HorizontalAlignment="Left" 
+                                     Height="23"
+                                     VerticalAlignment="Top"
+                                     Width="150"/>
+                            <Button Name="applyTest" 
+                                    Content="应用此型号" 
+                                    HorizontalAlignment="Left" 
+                                    Margin="55,0,0,0" 
+                                    VerticalAlignment="Top" 
+                                    Width="150" 
+                                    Click="applyTest_Click" 
+                                    Height="30"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"  Grid.Row="0" Grid.Column="2">
+                            <ni:Switch x:Name="switchManualAuto"
+                                       Content="Switch" 
+                                       Margin="120,0,0,0" 
+                                       FalseContent="自动" 
+                                       HorizontalAlignment="Right" 
+                                       VerticalAlignment="Top"  
+                                       Height="25" 
+                                       TrueContent="手动" 
+                                       Width="120" 
+                                       ValueChanged="switchManualAuto_ValueChanged"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"  Grid.Row="1" Grid.Column="0">
+                            <Label Content="额定扭矩       " HorizontalAlignment="Left"/>
+                            <TextBox Name="torqueRated" 
+                                     Text="{Binding CouplingC.TorqueRated}"
+                                     HorizontalAlignment="Left" 
+                                     Height="23"
+                                     VerticalAlignment="Top" 
+                                     Width="150"
+                                     PreviewTextInput="tb_PreviewTextInput"
+                                     InputMethod.IsInputMethodEnabled="False"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"  Grid.Row="1" Grid.Column="1">
+                            <Label Content="最高转速" HorizontalAlignment="Left" Margin="15,0,0,0"/>
+                            <TextBox Name="maxSpeed" 
+                                     Text="{Binding CouplingC.MaxSpeed}"
+                                     HorizontalAlignment="Left"
+                                     Height="23"
+                                     VerticalAlignment="Top"
+                                     Width="150"
+                                     PreviewTextInput="tb_PreviewTextInput"
+                                     InputMethod.IsInputMethodEnabled="False"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"  Grid.Row="1" Grid.Column="2">
+                            <Label Content="扭转弹性常数" HorizontalAlignment="Left" Margin="0,0,2,0"/>
+                            <TextBox Name="torqueCons" 
+                                     Text="{Binding CouplingC.TorqueCons}"
+                                     HorizontalAlignment="Left"
+                                     Height="23" 
+                                     VerticalAlignment="Top"
+                                     Width="150"
+                                     PreviewTextInput="tb_PreviewTextInput"
+                                     InputMethod.IsInputMethodEnabled="False"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"  Grid.Row="2" Grid.Column="0">
+                            <Label Content="轴向弹性常数" HorizontalAlignment="Left" Margin="0,0,1,0"/>
+                            <TextBox Name="axialCons" 
+                                     Text="{Binding CouplingC.AxialCons}"
+                                     HorizontalAlignment="Left" 
+                                     Height="23" 
+                                     VerticalAlignment="Top" 
+                                     Width="150"
+                                     PreviewTextInput="tb_PreviewTextInput"
+                                     InputMethod.IsInputMethodEnabled="False"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"  Grid.Row="2" Grid.Column="1">
+                            <Label Content="转动惯量" HorizontalAlignment="Left" Margin="15,0,0,0"/>
+                            <TextBox Name="momentIne" 
+                                     Text="{Binding CouplingC.MomentIne}"
+                                     HorizontalAlignment="Left"
+                                     Height="23"
+                                     VerticalAlignment="Top" 
+                                     Width="150"
+                                     PreviewTextInput="tb_PreviewTextInput"
+                                     InputMethod.IsInputMethodEnabled="False"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"  Grid.Row="2" Grid.Column="2">
+                            <Label Content="质量              " HorizontalAlignment="Left"/>
+                            <TextBox Name="mass" 
+                                     Text="{Binding CouplingC.Mass}"
+                                     HorizontalAlignment="Left" 
+                                     Height="23"
+                                     VerticalAlignment="Top" 
+                                     Width="150"
+                                     PreviewTextInput="tb_PreviewTextInput"
+                                     InputMethod.IsInputMethodEnabled="False"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="开始测试"
+                     x:Name="tabAuto">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Margin="10,0,0,0" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2">
+                        <Grid Height="170">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1.2*" />
+                                <RowDefinition Height="3*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                                <Label Content="当前型号" Margin="10,0,0,0"/>
+                                <TextBox x:Name="textTestCoupling" Height="23" Width="190" IsEnabled="False"/>
+                                <Label Content="当前动作" Margin="10,0,0,0"/>
+                                <TextBox Height="23" 
+                                         Width="190" 
+                                         x:Name="currentAction"
+                                         IsEnabled="False"/>
+                            </StackPanel>
+                            <StackPanel Margin="20,0,0,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                                <StackPanel  Orientation="Horizontal" Margin="20,12,0,10">
+                                    <CheckBox x:Name="checkBoxStaticStiffness" Content="静态刚度" Height="23" Width="100" Margin="0,0,0,10"/>
+                                    <Label Content="力矩" Margin="10,0,0,0"/>
+                                    <TextBox Height="23" 
+                                             Width="150"
+                                             x:Name="textBoxStaticStiffness"
+                                             PreviewTextInput="tb_PreviewTextInput"
+                                             InputMethod.IsInputMethodEnabled="False"/>
+                                </StackPanel>
+                                <StackPanel  Orientation="Horizontal" Margin="20,0,0,0">
+                                    <CheckBox x:Name="checkBoxDynamicStiffness" Content="动态刚度" Height="23" Width="100" Margin="0,0,0,10"/>
+                                    <Label Content="频率" Margin="10,0,0,0"/>
+                                    <TextBox Height="23" 
+                                             Width="150"
+                                             x:Name="textBoxFrequency"
+                                             PreviewTextInput="tb_PreviewTextInput"
+                                             InputMethod.IsInputMethodEnabled="False"/>
+                                    <Label Content="力矩" Margin="10,0,0,0"/>
+                                    <TextBox Height="23" 
+                                             Width="150"
+                                             x:Name="textBoxDynamicStiffness"
+                                             PreviewTextInput="tb_PreviewTextInput"
+                                             InputMethod.IsInputMethodEnabled="False"/>
+                                </StackPanel>
+
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+                                <TextBox x:Name="textStatus" Margin="10,0,0,0" Text="未连接" Width="190" IsEnabled="False"/>
+                                <Button x:Name="btnConn" Margin="20,0,0,0" Content="重新连接RT" Height="30" Width="100" Click="btnConn_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                    <StackPanel Margin="10,0,0,0" Grid.Row="1" Grid.Column="1" Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal" Margin="20,10,0,0">
+                            <Label Content="当前位置" Margin="0,0,0,0"/>
+                            <Slider x:Name="posMotorSliderView2"
+                                    Margin="0,0,0,0"
+                                    TickFrequency="1" 
+                                    ValueChanged="posMotorSlider_ValueChanged" 
+                                    IsEnabled="False"
+                                    Width="450" 
+                                    IsDirectionReversed="True"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="20,10,0,0">
+                            <Label Content="旋转转速"/>
+                            <TextBox x:Name="textRotateSpeedAutoReal"
+                                     HorizontalAlignment="Left" 
+                                     Height="23" 
+                                     TextWrapping="Wrap" 
+                                     Text="0" 
+                                     VerticalAlignment="Top" 
+                                     Width="190" 
+                                     Grid.IsSharedSizeScope="True" 
+                                     Margin="5,0" IsReadOnlyCaretVisible="True" IsEnabled="False"/>
+                            <Label Content="旋转角度"/>
+                            <TextBox x:Name="textRotatePosAutoReal"
+                                     HorizontalAlignment="Left" 
+                                     Height="23" 
+                                     TextWrapping="Wrap" 
+                                     Text="0" 
+                                     VerticalAlignment="Top" 
+                                     Width="190" 
+                                     Grid.IsSharedSizeScope="True" 
+                                     Margin="5,0" IsReadOnlyCaretVisible="True" IsEnabled="False"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Label Background="LightBlue" Content="转角" Height="20" HorizontalContentAlignment="Center" Margin="10,5,600,0" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+                        <Grid Margin="10,5" 
+                              Grid.Row="1" 
+                              Grid.ColumnSpan="2" 
+                              Height="410">
+                            <WindowsFormsHost Margin="0,0,10,10">
+                                <local:DynamicCurve x:Name="host"/>
+                            </WindowsFormsHost>
+                        </Grid>
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="1">
+                        <Label Background="LightBlue" Content="力矩" Height="20" HorizontalContentAlignment="Center" Margin="10,5,10,0" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Grid.Column="1">
+                        <ProgressBar x:Name="progressBarTest"
+                                     Width="510" 
+                                     Height="20" 
+                                     Margin="20,0,0,0" 
+                                     Value="50"/>
+                        <StackPanel Orientation="Horizontal" Margin="50,10,0,0">
+                            <Button x:Name="btnStartTest" 
+                                    Content="开始测试" 
+                                    Width="100" 
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Top" 
+                                    Click="btnStartTest_Click" 
+                                    Height="30"/>
+                            <Button x:Name="btnStopTest" 
+                                    Content="停止测试" 
+                                    Margin="305,0,0,0" 
+                                    Width="100" 
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Top" 
+                                    Click="btnStopTest_Click" 
+                                    Height="30"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="检测数据"
+                     x:Name="tabCouplingTestSet">
+                <Grid Background="#FFFFFFFF">
+                    <DataGrid Name="dataGridCouplingTestSet" 
+                              HorizontalAlignment="Left" 
+                              Height="565" 
+                              Margin="10,10,0,0"
+                              VerticalAlignment="Top" 
+                              Width="1160" 
+                              SelectionChanged="dataGridCouplingTestSet_SelectionChanged" 
+                              IsReadOnly="True" 
+                              HorizontalScrollBarVisibility="Visible" 
+                              VerticalScrollBarVisibility="Visible">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="id" 
+                                                Binding="{Binding id}" 
+                                                Width="0" 
+                                                Visibility="Hidden"/>
+                            <DataGridTextColumn Header="型号" 
+                                                Binding="{Binding couplingId}" 
+                                                Width="200" />
+                            <DataGridTextColumn Header="测试时间" 
+                                                Binding="{Binding mesTime}" 
+                                                Width="150" />
+                            <DataGridTextColumn Header="测试项目" 
+                                                Binding="{Binding testItem}" 
+                                                Width="120" />
+                            <DataGridTextColumn Header="测试扭矩" 
+                                                Binding="{Binding testTorque}" 
+                                                Width="120" />
+                            <DataGridTextColumn Header="测试频率" 
+                                                Binding="{Binding testFrequency}" 
+                                                Width="120" />
+                            <DataGridTextColumn Header="测试刚度" 
+                                                Binding="{Binding testStiffness}" 
+                                                Width="120" />
+                            <DataGridTextColumn Header="额定扭矩" 
+                                                Binding="{Binding torqueRated}" 
+                                                Width="120" />
+                            <DataGridTextColumn Header="最高转速" 
+                                                Binding="{Binding maxSpeed}" 
+                                                Width="120" />
+                            <DataGridTextColumn Header="扭转弹性常数" 
+                                                Binding="{Binding torqueCons}" 
+                                                Width="120" />
+                            <DataGridTextColumn Header="轴向弹性常数" 
+                                                Binding="{Binding axialCons}" 
+                                                Width="120" />
+                            <DataGridTextColumn Header="转动惯量" 
+                                                Binding="{Binding momentIne}" 
+                                                Width="120" />
+                            <DataGridTextColumn Header="质量" 
+                                                Binding="{Binding mass}" 
+                                                Width="120" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button x:Name="btnRefresh" 
+                            Content="刷新数据" 
+                            HorizontalAlignment="Right" 
+                            Margin="10,590,180,0" 
+                            VerticalAlignment="Top" 
+                            Width="100" 
+                            Height="30" Click="BtnRefresh_Click"/>
+                    <Button x:Name="btnTestDelete" 
+                            Content="删除数据" 
+                            HorizontalAlignment="Right" 
+                            Margin="10,590,40,0" 
+                            VerticalAlignment="Top" 
+                            Width="100" 
+                            Height="30" Click="btnTestDelete_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="报表参数">
+                <StackPanel Width="320" Margin="440,20,0,0" Orientation="Vertical" HorizontalAlignment="Left">
+                    <StackPanel Width="500" VerticalAlignment="Top" Margin="5" Orientation="Horizontal">
+                        <Label VerticalAlignment="Center">检测单位</Label>
+                        <TextBox x:Name="textDepartment" Width="240" Height="30" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="500" VerticalAlignment="Top" Margin="5">
+                        <Label VerticalAlignment="Center">客户名称</Label>
+                        <TextBox x:Name="textCustomer" Width="240" Height="30" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="500" VerticalAlignment="Top" Margin="5">
+                        <Label VerticalAlignment="Center" Margin="28,0,0,0">批号</Label>
+                        <TextBox x:Name="textBatchNum" Width="240" Height="30" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="500" VerticalAlignment="Top" Margin="5">
+                        <Label VerticalAlignment="Center" Margin="28,0,0,0">编号</Label>
+                        <TextBox x:Name="textNum" Width="240" Height="30" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="500" VerticalAlignment="Top" Margin="5">
+                        <Label VerticalAlignment="Center" Margin="0,0,0,0">试样名称</Label>
+                        <TextBox x:Name="textCouplingType" Width="240" Height="30" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="500" VerticalAlignment="Top" Margin="5">
+                        <Label VerticalAlignment="Center" Margin="28,0,0,0">规格</Label>
+                        <TextBox x:Name="textStandard" Width="240" Height="30" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="500" VerticalAlignment="Top" Margin="5">
+                        <Label VerticalAlignment="Center" Margin="28,0,0,0">温度</Label>
+                        <TextBox x:Name="textTemp" Width="240" Height="30" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="500" VerticalAlignment="Top" Margin="5">
+                        <Label VerticalAlignment="Center" Margin="28,0,0,0">湿度</Label>
+                        <TextBox x:Name="textHumidity" Width="240" Height="30" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="500" VerticalAlignment="Top" Margin="5">
+                        <Label VerticalAlignment="Center" Margin="28,0,0,0">形状</Label>
+                        <TextBox x:Name="textShape" Width="240" Height="30" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="500" VerticalAlignment="Top" Margin="5">
+                        <Label VerticalAlignment="Center" Margin="28,0,0,0">直径</Label>
+                        <TextBox x:Name="textDiameter" Width="240" Height="30" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="500" VerticalAlignment="Top" Margin="5">
+                        <Label VerticalAlignment="Center" Margin="28,0,0,0">面积</Label>
+                        <TextBox x:Name="textArea" Width="240" Height="30" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="500" VerticalAlignment="Top" Margin="5">
+                        <Label VerticalAlignment="Center">最大扭矩</Label>
+                        <TextBox x:Name="textMaxTorque" Width="240" Height="30" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="500" VerticalAlignment="Top" Margin="5">
+                        <Label VerticalAlignment="Center" Margin="14,0,0,0">试验员</Label>
+                        <TextBox x:Name="textTester" Width="240" Height="30" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="500" VerticalAlignment="Top" Margin="5">
+                        <Label VerticalAlignment="Center" Margin="0,0,0,0">试验日期</Label>
+                        <TextBox x:Name="textTime" Width="240" Height="30" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="500" VerticalAlignment="Top" Margin="5">
+                        <Label VerticalAlignment="Center" Margin="14,0,0,0">审核员</Label>
+                        <TextBox x:Name="textAssessor" Width="240" Height="30" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="刚度曲线"
+                     x:Name="tabStiffnessCurve">
+                <Grid Background="#FFFFFFFF">
+                    <Label Background="LightBlue" 
+                           Content="刚度曲线" Height="20" 
+                           HorizontalContentAlignment="Center" 
+                           Margin="10,5,10,0" 
+                           Padding="0" 
+                           VerticalAlignment="Top" 
+                           VerticalContentAlignment="Center" 
+                           Grid.ColumnSpan="2"/>
+                    <WindowsFormsHost Margin="10,30,150,40" Grid.ColumnSpan="2">
+                        <local:StiffnessCurve x:Name="xyGraph"/>
+                    </WindowsFormsHost>
+                    <Label Content="拟合刚度"
+                            HorizontalAlignment="Right" 
+                            Height="26" 
+                            VerticalAlignment="Top" 
+                            Width="120" 
+                            Grid.IsSharedSizeScope="True" 
+                            Margin="20,30"/>
+                    <TextBox x:Name="textStiffness"
+                            HorizontalAlignment="Right" 
+                            Height="23" 
+                            TextWrapping="Wrap" 
+                            Text="0" 
+                            VerticalAlignment="Top" 
+                            Width="120" 
+                            Grid.IsSharedSizeScope="True" 
+                            Margin="20,60" IsReadOnlyCaretVisible="True" IsEnabled="False"/>
+                    <Button x:Name="btnTest" 
+                            Content="测试曲线" 
+                            Width="100" 
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top" 
+                            Height="30" 
+                            Margin="1040,596,0,0" Click="btnTest_Click" Visibility="Hidden"/>
+                    <Button x:Name="btnSSC" 
+                            Content="刚度曲线" 
+                            Width="100" 
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top" 
+                            Height="30" 
+                            Margin="910,596,0,0" Click="btnSSC_Click"/>
+                    <Button x:Name="btnPrint" 
+                            Content="存储报表" 
+                            Width="100" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Top" 
+                            Height="30" 
+                            Margin="0,596,40,0" Click="BtnPrint_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="手动模式"
+                     x:Name="tabManual">
+                <Grid Background="#FFFFFFFF">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="6*" />
+                        <RowDefinition Height="2*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="176*" />
+                        <ColumnDefinition Width="119*"/>
+                        <ColumnDefinition Width="295*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+                        <Label Background="LightBlue" Content="转角" Height="20" HorizontalContentAlignment="Center" Margin="10,5,600,0" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+                        <Grid Margin="10,5" 
+                              Grid.Row="1" 
+                              Grid.ColumnSpan="2" 
+                              Height="440">
+                            <WindowsFormsHost Margin="0,0,0,40">
+                                <local:DynamicCurve x:Name="manual"/>
+                            </WindowsFormsHost>
+                            <ni:Switch x:Name="switchManualSaveData"
+                                       Content="Switch" 
+                                       Margin="0,0,40,0" 
+                                       FalseContent="停止" 
+                                       HorizontalAlignment="Right" 
+                                       VerticalAlignment="Bottom"  
+                                       Height="25" 
+                                       TrueContent="记录" 
+                                       Width="120" 
+                                       ValueChanged="switchManualSaveData_ValueChanged" Visibility="Hidden"/>
+                        </Grid>
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="2">
+                        <Label Background="LightBlue" Content="力矩" Height="20" HorizontalContentAlignment="Center" Margin="10,5,10,0" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="2" Margin="30,0,30,0">
+                        <Label Background="LightBlue" Content="转动电机" Height="20" HorizontalContentAlignment="Center" Margin="10,5,10,5" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                            <Label Content="角度"/>
+                            <TextBox x:Name="textRotatePosReal"
+                                     HorizontalAlignment="Left" 
+                                     Height="23" 
+                                     Text="0" 
+                                     VerticalAlignment="Top" 
+                                     Width="140" 
+                                     Margin="10,0" 
+                                     IsEnabled="False"/>
+                            <TextBox x:Name="textRotatePos"
+                                     HorizontalAlignment="Left" 
+                                     Height="23" 
+                                     Text="0" 
+                                     VerticalAlignment="Top" 
+                                     Width="140" 
+                                     Margin="0,0,10,0"
+                                     PreviewTextInput="tb_PreviewTextInput"
+                                     InputMethod.IsInputMethodEnabled="False"/>
+                            <Button x:Name="btnRotatePosSet" 
+                                    Content="重设" 
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Top" 
+                                    Width="75" 
+                                    Margin="17,3,0,0"
+                                    Click="btnRotatePosSet_Clicked"/>
+                            <!--Label Content="设置" Margin="0,0,0,0"/-->
+                            <ni:Switch x:Name="swithRotatePosSet"
+                                       Content="设置" 
+                                       HorizontalAlignment="Left" 
+                                       VerticalAlignment="Top" 
+                                       Width="60"
+                                       Height="20"
+                                       Margin="16,3,0,0" 
+                                       ValueChanged="switchRotatePosSet_ValueChanged"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,0 " Height="30">
+                            <Label Content="转速"/>
+                            <TextBox x:Name="textRotateSpeedReal"
+                                     HorizontalAlignment="Left" 
+                                     Height="23" 
+                                     Text="0" 
+                                     VerticalAlignment="Top" 
+                                     Width="140" 
+                                     Margin="10,0" IsEnabled="False"/>
+                            <TextBox x:Name="textRotateSpeed"
+                                     HorizontalAlignment="Left" 
+                                     Height="23" 
+                                     Text="0" 
+                                     VerticalAlignment="Top" 
+                                     Width="140" 
+                                     Margin="0,0,10,0"
+                                     PreviewTextInput="tb_PreviewTextInput"
+                                     InputMethod.IsInputMethodEnabled="False"/>
+                            <Button x:Name="btnRotateCW" 
+                                    Content="CW" 
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Top" 
+                                    Width="75" 
+                                    Margin="17,3,10,0"
+                                    MouseLeftButtonDown="btnRotateCW_Down"
+                                    MouseLeftButtonUp="btnRotateCW_Up"/>
+                            <Button x:Name="btnRotateCCW" 
+                                    Content="CCW" 
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Top" 
+                                    Width="75" 
+                                    Margin="0,3,10,0"
+                                    MouseLeftButtonDown="btnRotateCCW_Down"
+                                    MouseLeftButtonUp="btnRotateCCW_Up"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,0 " Height="30">
+                            <Label Content="定位力矩"/>
+                            <TextBox x:Name="textTargetTorque"
+                                     HorizontalAlignment="Left" 
+                                     Height="23" 
+                                     Text="0" 
+                                     VerticalAlignment="Top" 
+                                     Width="140" 
+                                     Margin="10,0"/>
+                            <Button x:Name="btnSearchTorque" 
+                                    Content="开始" 
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Top" 
+                                    Width="75" 
+                                    Margin="10,3,10,0"
+                                    Click="BtnSearchTorque_Click"/>
+                            <Button x:Name="btnSetAngelMid" 
+                                    Content="角度调中" 
+                                    HorizontalAlignment="Left" 
+                                    Width="75" 
+                                    Margin="44,3,10,7" Click="btnSetAngelMid_Click" Visibility="Hidden"/>
+                            <Button x:Name="btnKeepAngelMid" 
+                                    Content="中点保持" 
+                                    HorizontalAlignment="Left" 
+                                    Width="75" 
+                                    Margin="0,3,10,7" Click="btnKeepAngelMid_Click"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <!--Label Content="固定中点" Margin="0,0,0,0"/-->
+                            <!--ni:Switch x:Name="switchFixedCenter"
+                                       Content="Switch" 
+                                       Margin="0,3,0,0" 
+                                       FalseContent="Off" 
+                                       VerticalAlignment="Top" 
+                                       HorizontalAlignment="Left" 
+                                       Height="23" 
+                                       TrueContent="On" 
+                                       Width="100"
+                                       ValueChanged="switchFixedCenter_ValueChanged"/-->
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="0" Margin="30,0,30,0" Grid.ColumnSpan="2">
+                        <Label Background="LightBlue" Content="移动电机" Height="20" HorizontalContentAlignment="Center" Margin="10,5,10,5" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                            <Label Content="当前位置" Margin="0,0,0,0"/>
+                            <Slider x:Name="posMotorSliderView"
+                                    Margin="0,0,0,0"
+                                    TickFrequency="1" 
+                                    ValueChanged="posMotorSlider_ValueChanged" 
+                                    IsEnabled="False"
+                                    Width="450" 
+                                    IsDirectionReversed="True"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                            <Label Content="位置" Margin="0,0,0,0"/>
+                            <TextBox x:Name="textMovePosReal"
+                                     HorizontalAlignment="Left" 
+                                     Height="23" 
+                                     Text="0" 
+                                     VerticalAlignment="Top" 
+                                     Width="140" 
+                                     Margin="10,0" 
+                                     IsEnabled="False"
+                                     TextChanged="textMovePosReal_Changed"/>
+                            <TextBox x:Name="textMovePos"
+                                     HorizontalAlignment="Left" 
+                                     Height="23" 
+                                     Text="0" 
+                                     VerticalAlignment="Top" 
+                                     Width="140" 
+                                     Margin="0,0,10,0"
+                                     PreviewTextInput="tb_PreviewTextInput"
+                                     InputMethod.IsInputMethodEnabled="False" 
+                                     TextChanged="textMovePos_TextChanged"/>
+                            <ni:Switch x:Name="btnMMDistanceSet" 
+                                    Content="设置" 
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Top" 
+                                    Width="60"
+                                    Height="20" 
+                                    ValueChanged="btnMMDistanceSet_Click"
+                                    Margin="10,3,0,0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                            <Label Content="设定位置" Margin="0,0,0,0"/>
+                            <Slider x:Name="posMotorSlider"
+                                    Width="450"
+                                    TickFrequency="1" 
+                                    IsSnapToTickEnabled="True" 
+                                    ValueChanged="posMotorSlider_ValueChanged" 
+                                    IsDirectionReversed="True"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                            <Label Content="转速" Margin="0,0,0,0"/>
+                            <TextBox x:Name="textMoveSpeedReal"
+                                     HorizontalAlignment="Left" 
+                                     Height="23" 
+                                     Text="0" 
+                                     VerticalAlignment="Top" 
+                                     Width="140" 
+                                     Margin="10,0" 
+                                     IsEnabled="False"/>
+                            <TextBox x:Name="textMoveSpeed"
+                                     HorizontalAlignment="Left" 
+                                     Height="23" 
+                                     Text="0" 
+                                     VerticalAlignment="Top" 
+                                     Width="140" 
+                                     Margin="0,0,10,0"
+                                     PreviewTextInput="tb_PreviewTextInput"
+                                     InputMethod.IsInputMethodEnabled="False"/>
+                            <Button x:Name="btnMoveCW" 
+                                    Content="前进" 
+                                    HorizontalAlignment="Right" 
+                                    VerticalAlignment="Top" 
+                                    Width="75" 
+                                    Margin="17,3,10,0"
+                                    MouseLeftButtonDown="btnMoveCW_Down"
+                                    MouseLeftButtonUp="btnMoveCW_up"/>
+                            <Button x:Name="btnMoveCCW" 
+                                    Content="后退" 
+                                    HorizontalAlignment="Right" 
+                                    VerticalAlignment="Top" 
+                                    Width="75" 
+                                    Margin="0,3,50,40"
+                                    MouseLeftButtonDown="btnMoveCCW_Down"
+                                    MouseLeftButtonUp="btnMoveCCW_up"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                            <!--Label Content="使能"/-->
+                            <!--ni:Switch Content="Switch" FalseContent="Off" HorizontalAlignment="Left" Height="23" TrueContent="On" Width="100"/-->
+
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <!--<TabItem Header="3D"
+                     x:Name="tab3D">
+                <Grid Background="Azure"  Grid.Column="1" Name="Container" >
+                    <WindowsFormsHost>
+                        <local:Coupling3D x:Name="unityhost">
+
+                        </local:Coupling3D>
+                    </WindowsFormsHost>
+                </Grid>
+            </TabItem>-->
+        </TabControl>
+    </Grid>
+</Window>
